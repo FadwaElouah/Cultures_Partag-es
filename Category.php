@@ -33,5 +33,22 @@ class Article {
         
         return $stmt->fetchAll();
     }
+    public function createArticle($title, $content, $category_id, $author_id) {
+        $sql = "INSERT INTO articles (title, content, id_categorie, id_auteur) VALUES (?, ?, ?, ?)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$title, $content, $category_id, $author_id]);
+    }
+
+    public function updateArticle($id, $title, $content, $category_id) {
+        $sql = "UPDATE articles SET title = ?, content = ?, id_categorie = ? WHERE id_article = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$title, $content, $category_id, $id]);
+    }
+
+    public function deleteArticle($id) {
+        $sql = "DELETE FROM articles WHERE id_article = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$id]);
+    }
  
 }

@@ -12,4 +12,9 @@ class Category {
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
     }
+    public function createCategory($name, $description) {
+        $sql = "INSERT INTO categories (name, description) VALUES (?, ?)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$name, $description]);
+    }
 }

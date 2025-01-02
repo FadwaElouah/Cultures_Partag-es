@@ -7,4 +7,9 @@ class Category {
     public function __construct() {
         $this->db = Database::getInstance()->getConnection();
     }
+    public function getAllCategories() {
+        $sql = "SELECT * FROM categories";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
+    }
 }

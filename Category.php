@@ -17,4 +17,15 @@ class Category {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$name, $description]);
     }
+    public function updateCategory($id, $name, $description) {
+        $sql = "UPDATE categories SET name = ?, description = ? WHERE id_categorie = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$name, $description, $id]);
+    }
+
+    public function deleteCategory($id) {
+        $sql = "DELETE FROM categories WHERE id_categorie = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$id]);
+    }
 }

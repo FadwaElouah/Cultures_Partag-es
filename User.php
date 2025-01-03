@@ -6,6 +6,19 @@ class User {
 
     public function __construct() {
         $this->db = Database::getInstance()->getConnection();
+    
+    }
+
+    public function isLoggedIn() {
+        return isset($_SESSION['user_id']);
+    }
+
+    public function isAdmin() {
+        return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+    }
+
+    public function isAuthor() {
+        return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'auteur';
     }
 
     public function register($name, $email, $password) {
@@ -45,4 +58,3 @@ class User {
         return $stmt->execute([$id]);
     }
 }
-

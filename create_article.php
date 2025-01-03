@@ -100,9 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </main>
 
-    <footer class="bg-gray-800 text-white py-4">
+    <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
+            <p>&copy; 2023 Cultures Partagées. Tous droits réservés.</p>
         </div>
     </footer>
 </body>

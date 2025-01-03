@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord Admin - Cultures Partagées</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="bg-gray-100">
     <header class="bg-white shadow">
@@ -86,25 +87,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <h2 class="text-2xl font-bold mb-4">Gestion des utilisateurs</h2>
+                <h2 class="text-2xl text-green-400 font-bold mb-4">Gestion des utilisateurs</h2>
                 <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <table class="w-full">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Nom</th>
-                                <th class="text-left">Email</th>
-                                <th class="text-left">Rôle</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($users as $u): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($u['name']); ?></td>
-                                    <td><?php echo htmlspecialchars($u['email']); ?></td>
-                                    <td><?php echo htmlspecialchars($u['role']); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
+                       <table class="w-full border-collapse border border-gray-300">
+    <thead class="bg-gray-200">
+        <tr>
+            <th class="text-left border border-gray-300 px-4 py-2">Nom</th>
+            <th class="text-left border border-gray-300 px-4 py-2">Email</th>
+            <th class="text-left border border-gray-300 px-4 py-2">Rôle</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php $loopIndex = 0;?>
+        <?php foreach ($users as $u): ?>
+            <tr class="<?php echo $loopIndex % 2 === 0 ? 'bg-white' : 'bg-gray-100'; ?>">
+                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['name']); ?></td>
+                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['email']); ?></td>
+                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['role']); ?></td>
+            </tr>
+        <?php $loopIndex++; endforeach; ?>
+    </tbody>
+</table>
+
                     </table>
                 </div>
             </div>
@@ -131,21 +136,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </button>
                         </div>
                     </form>
-                    <table class="w-full">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Nom</th>
-                                <th class="text-left">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($categories as $cat): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($cat['name']); ?></td>
-                                    <td><?php echo htmlspecialchars($cat['description']); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
+                    <table class="w-full border border-gray-300">
+    <thead class="bg-gray-200">
+        <tr>
+            <th class="text-left px-4 py-2 border-b">Nom</th>
+            <th class="text-left px-4 py-2 border-b">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($categories as $index => $cat): ?>
+            <tr class="<?php echo $index % 2 == 0 ? 'bg-white' : 'bg-gray-100'; ?>">
+                <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['name']); ?></td>
+                <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['description']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
                     </table>
                 </div>
             </div>
@@ -164,8 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) . '...'; ?></p>
                             <form action="admin_dashboard.php" method="POST" class="inline-block">
                                 <input type="hidden" name="article_id" value="<?php echo $article['id_article']; ?>">
-                                <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">Approuver</button>
-                                <button type="submit" name="reject_article" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Rejeter</button>
+                                <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"><i class="fa-solid fa-check"></i></button>
+                                <button type="submit" name="reject_article" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"><i class="fa-solid fa-trash"></i></button>
                             </form>
                         </div>
                     <?php endforeach; ?>
@@ -174,9 +181,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 
-    <footer class="bg-gray-800 text-white py-4">
+    <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
+            <p>&copy; 2023 Cultures Partagées. Tous droits réservés.</p>
         </div>
     </footer>
 </body>

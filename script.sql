@@ -102,6 +102,12 @@ SET  description = 'Articles sur la danse, les styles de danse et les danseurs c
 WHERE id_categorie = 2;
 
 
+-- Trouver le nombre total d'articles publiés par catégorie.
+
+SELECT categories.name, COUNT(articles.id_article)
+FROM categories
+LEFT JOIN articles ON categories.id_categorie = articles.id_categorie
+GROUP BY categories.id_categorie;
 
 
 

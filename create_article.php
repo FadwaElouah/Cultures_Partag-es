@@ -40,15 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <header class="bg-white shadow">
+    <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg">
         <nav class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
                 <div>
-                    <a href="index.php" class="text-gray-800 text-xl font-bold md:text-2xl">Cultures Partagées</a>
+                    <a href="index.php" class="text-3xl font-semibold hover:text-gray-200 transition duration-300">Cultures Partagées</a>
                 </div>
                 <div>
-                    <a href="index.php" class="text-gray-800 hover:text-gray-600 mr-4">Retour à l'accueil</a>
-                    <a href="logout.php" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Déconnexion</a>
+                    <a href="index.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Retour à l'accueil</a>
+                    <a href="logout.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300 font-bold">Déconnexion</a>
                 </div>
             </div>
         </nav>
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2023 Cultures Partagées. Tous droits réservés.</p>
+            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
         </div>
     </footer>
 </body>

@@ -88,7 +88,7 @@ $categories = $category->getAllCategories();
         </div>
     </main>
 
-    <footer class="bg-gray-800 text-white py-4">
+    <footer class="bg-gray-800 text-white py-4 mt-[12rem]">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
         </div>

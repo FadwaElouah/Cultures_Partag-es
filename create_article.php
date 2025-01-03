@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <footer class="bg-gray-800 text-white py-4">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2023 Cultures Partagées. Tous droits réservés.</p>
+            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
         </div>
     </footer>
 </body>

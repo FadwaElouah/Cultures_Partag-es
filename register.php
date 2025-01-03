@@ -44,22 +44,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <span class="block sm:inline"><?php echo htmlspecialchars($error); ?></span>
                 </div>
             <?php endif; ?>
-            <form action="register.php" method="POST">
+            <form action="register.php" method="POST" id="form">
                 <div class="mb-4">
-                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nom</label>
+                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nom Complet</label>
                     <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <span id="nameError" class="text-red-500"></span>
                 </div>
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
                     <input type="email" id="email" name="email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <span id="emailError" class="text-red-500"></span>
                 </div>
                 <div class="mb-4">
                     <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
                     <input type="password" id="password" name="password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <span id="passwordError" class="text-red-500"></span>
                 </div>
                 <div class="mb-6">
                     <label for="confirm_password" class="block text-gray-700 text-sm font-bold mb-2">Confirmer le mot de passe</label>
                     <input type="password" id="confirm_password" name="confirm_password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <span id="confirmError" class="text-red-500"></span>
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -72,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
     </div>
+    <script src="main.js"></script>
 </body>
 </html>
 

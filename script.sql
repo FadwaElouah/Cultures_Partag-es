@@ -110,6 +110,40 @@ LEFT JOIN articles ON categories.id_categorie = articles.id_categorie
 GROUP BY categories.id_categorie;
 
 
+-- Identifier les auteurs les plus actifs en fonction du nombre d'articles publiés.
+
+SELECT utilisateur.name AS auteur, COUNT(articles.id_article) AS nombre_articles
+FROM utilisateur
+LEFT JOIN articles ON utilisateur.id_utilisateur = articles.id_auteur
+GROUP BY utilisateur.id_utilisateur
+ORDER BY nombre_articles DESC;
+
+-- Calculer la moyenne d'articles publiés par catégorie.
+
+SELECT AVG(COUNT(articles.id_article))
+FROM categories
+LEFT JOIN articles ON categories.id_categorie = articles.id_categorie
+GROUP BY categories.id_categorie;
+
+
+-- Créer une vue affichant les derniers articles publiés dans les 30 derniers jours.
+
+CREATE VIEW derniers_articles AS
+SELECT articles.id_article, articles.title, articles.content, articles.created_at, categories.name
+FROM articles
+JOIN categories ON articles.id_categorie = categories.id_categorie
+WHERE articles.created_at >= CURDATE() - INTERVAL 30 DAY;
+
+
+
+-- Trouver les catégories qui n'ont aucun article associé
+
+SELECT categories.id_categorie, categories.name
+FROM categories
+LEFT JOIN articles ON categories.id_categorie = articles.id_categorie
+WHERE articles.id_article IS NULL;
+
+
 
 
 

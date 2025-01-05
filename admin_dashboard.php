@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </nav>
     </header>
 
-    <main class="container mx-auto px-6 py-8">
+<main class="container mx-auto px-6 py-8">
         <h1 class="text-3xl font-bold mb-6">Tableau de bord Administrateur</h1>
 
         <?php if ($success): ?>
@@ -90,8 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2 class="text-2xl text-green-400 font-bold mb-4">Gestion des utilisateurs</h2>
                 <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <table class="w-full">
-                       <table class="w-full border-collapse border border-gray-300">
-    <thead class="bg-gray-200">
+       <table class="w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-300">
         <tr>
             <th class="text-left border border-gray-300 px-4 py-2">Nom</th>
             <th class="text-left border border-gray-300 px-4 py-2">Email</th>
@@ -101,12 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <tbody>
     <?php $loopIndex = 0;?>
         <?php foreach ($users as $u): ?>
-            <tr class="<?php echo $loopIndex % 2 === 0 ? 'bg-white' : 'bg-gray-100'; ?>">
+            <tr class="<?php echo $loopIndex % 2 === 0 ? 'bg-white' : 'bg-gray-200'; ?>">
                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['name']); ?></td>
                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['email']); ?></td>
                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['role']); ?></td>
             </tr>
-        <?php $loopIndex++; endforeach; ?>
+     <?php $loopIndex++; endforeach; ?>
     </tbody>
 </table>
 
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </form>
                     <table class="w-full border border-gray-300">
-    <thead class="bg-gray-200">
+    <thead class="bg-gray-300">
         <tr>
             <th class="text-left px-4 py-2 border-b">Nom</th>
             <th class="text-left px-4 py-2 border-b">Description</th>
@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </thead>
     <tbody>
         <?php foreach ($categories as $index => $cat): ?>
-            <tr class="<?php echo $index % 2 == 0 ? 'bg-white' : 'bg-gray-100'; ?>">
+            <tr class="<?php echo $index % 2 == 0 ? 'bg-white' : 'bg-gray-200'; ?>">
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['name']); ?></td>
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['description']); ?></td>
             </tr>
@@ -153,7 +153,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </tbody>
 </table>
 
-                    </table>
                 </div>
             </div>
         </div>
@@ -168,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="mb-4 p-4 border rounded">
                             <h3 class="text-xl font-bold"><?php echo htmlspecialchars($article['title']); ?></h3>
                             <p class="mb-2">Par <?php echo htmlspecialchars($article['author_name']); ?> dans <?php echo htmlspecialchars($article['category_name']); ?></p>
-                            <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) . '...'; ?></p>
+                            <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) .  '...'; ?></p>
                             <form action="admin_dashboard.php" method="POST" class="inline-block">
                                 <input type="hidden" name="article_id" value="<?php echo $article['id_article']; ?>">
                                 <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"><i class="fa-solid fa-check"></i></button>
@@ -179,11 +178,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php endif; ?>
             </div>
         </div>
-    </main>
+</main>
 
     <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2023 Cultures Partagées. Tous droits réservés.</p>
+            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
         </div>
     </footer>
 </body>

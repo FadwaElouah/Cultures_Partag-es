@@ -2,7 +2,7 @@
 session_start();
 require_once 'Article.php';
 require_once 'Category.php';
-require_once 'User.php'; // Assuming you have a User class
+require_once 'User.php'; 
 
 // Check if the user is logged in
 $user = new User();
@@ -41,9 +41,9 @@ $categories = $category->getAllCategories();
                     <?php if ($user->isAdmin()): ?>
                         <a href="admin_dashboard.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Admin</a>
                     <?php endif; ?>
-                    <?php if ($user->isAuthor() || $user->isAdmin()): ?>
+                    <!-- <?php if ($user->isAuthor() || $user->isAdmin()): ?>
                         <a href="create_article.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Créer un article</a>
-                    <?php endif; ?>
+                    <?php endif; ?> -->
                     <a href="logout.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300 font-bold">Déconnexion</a>
                 <?php else: ?>
                     <a href="login.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Connexion</a>
@@ -72,7 +72,8 @@ $categories = $category->getAllCategories();
                     <img src="imgOne.png" alt="Article Image" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-gray-900 mb-2"><?php echo htmlspecialchars($art['title']); ?></h2>
-                        <p class="text-gray-600 mb-4"><?php echo substr(htmlspecialchars($art['content']), 0, 150) . '...'; ?></p>
+                        <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($art['content']); ?></p>
+                        <!-- <p class="text-gray-600 mb-4"><?php echo substr(htmlspecialchars($art['content']), 0, 150) . '...'; ?></p> -->
                         <div class="flex justify-between items-center text-sm text-gray-500">
                             <span>Par <?php echo htmlspecialchars($art['author_name']); ?></span>
                             <span><?php echo htmlspecialchars($art['category_name']); ?></span>
@@ -98,7 +99,7 @@ $categories = $category->getAllCategories();
 
     <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2023 Cultures Partagées. Tous droits réservés.</p>
+            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
         </div>
     </footer>
 

@@ -61,7 +61,7 @@ class Article {
         return $stmt->fetchAll();
     }
 
-    public function approveArticle($id) {
+    public function approveArticle($id) { 
         $sql = "UPDATE articles SET status = 'approved' WHERE id_article = ?";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id]);
@@ -72,4 +72,13 @@ class Article {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id]);
     }
+    // ===
+    // Cette fonction pour récupérer un article par son ID
+public function getArticleById($id) {
+    $sql = "SELECT * FROM articles WHERE id_article = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetch();
+}
+
 }

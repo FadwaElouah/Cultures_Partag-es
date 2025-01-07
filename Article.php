@@ -119,5 +119,15 @@ public function generatePDF($article_id) {
 
     return $pdf->Output($article['title'] . '.pdf', 'S');
 }
+public function addTag($article_id, $tag_name) {
+    $sql = "INSERT INTO tags (name) VALUES (?) ON DUPLICATE KEY UPDATE id_tag = LAST_INSERT_ID(id_tag)";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$tag_name]);
+    $tag_id = $this->db->lastInsertId();
+
+    $sql = "INSERT INTO article_tags (id_article, id_tag) VALUES (?, ?)";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$article_id, $tag_id]);
+}
 
 }

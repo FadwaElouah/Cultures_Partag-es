@@ -80,5 +80,16 @@ public function getArticleById($id) {
     $stmt->execute([$id]);
     return $stmt->fetch();
 }
+public function likeArticle($article_id, $user_id) {
+    $sql = "INSERT INTO likes (id_article, id_utilisateur) VALUES (?, ?)";
+    $stmt = $this->db->prepare($sql);
+    $result = $stmt->execute([$article_id, $user_id]);
+
+    if ($result) {
+        $this->addToFavorites($article_id, $user_id);
+    }
+
+    return $result;
+}
 
 }

@@ -162,13 +162,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </thead>
     <tbody>
     <?php $loopIndex = 0;?>
-        <?php foreach ($users as $u): ?>
+        <!-- <?php foreach ($users as $u): ?>
             <tr class="<?php echo $loopIndex % 2 === 0 ? 'bg-white' : 'bg-gray-200'; ?>">
                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['name']); ?></td>
                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['email']); ?></td>
                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['role']); ?></td>
             </tr>
      <?php $loopIndex++; endforeach; ?>
+      -->
+      <?php foreach ($users as $u): ?>
+              <tr>
+                <td><?php echo htmlspecialchars($u['name']); ?></td>
+                <td><?php echo htmlspecialchars($u['email']); ?></td>
+                <td><?php echo htmlspecialchars($u['role']); ?></td>
+                <td>
+                     <button onclick="openUserModal(<?php echo htmlspecialchars(json_encode($u)); ?>)" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
+                      <form action="admin_dashboard.php" method="POST" class="inline">
+                        <input type="hidden" name="user_id" value="<?php echo $u['id_utilisateur']; ?>">
+                        <button type="submit" name="delete_user" class="text-red-500 hover:text-red-700" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');"><i class="fas fa-trash"></i></button>
+                      </form>
+                 </td>
+             </tr>
+     <?php endforeach; ?>
     </tbody>
 </table>
 
@@ -212,13 +227,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['name']); ?></td>
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['description']); ?></td>
                 <td class="px-4 py-2 border-b">
-                    <!-- Formulaire Modifier -->
+                    ==============
+                  
                     <form action="admin_dashboard.php" method="POST" class="inline">
                         <input type="hidden" name="id_categorie" value="<?php echo $cat['id_categorie']; ?>">
                         <button type="submit" name="edit_category" class="bg-yellow-500 hover:bg-yellow-700 text-white  rounded">Modifier</button>
                     </form>
                     
-                    <!-- Formulaire Supprimer -->
+                 
                     <form action="admin_dashboard.php" method="POST" class="inline">
                         <input type="hidden" name="id_categorie" value="<?php echo $cat['id_categorie']; ?>">
                         <button type="submit" name="delete_category" class="bg-red-500 hover:bg-red-700 text-white  rounded">Supprimer</button>

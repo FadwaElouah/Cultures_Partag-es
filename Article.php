@@ -91,5 +91,10 @@ public function likeArticle($article_id, $user_id) {
 
     return $result;
 }
+public function addToFavorites($article_id, $user_id) {
+    $sql = "INSERT INTO favorites (id_article, id_utilisateur) VALUES (?, ?)";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$article_id, $user_id]);
+}
 
 }

@@ -67,14 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = 'Erreur lors de la mise à jour de l\'utilisateur';
         }
       // Supprimer une catégorie
-      if (isset($_POST['delete_category'])) {
-        $idCategorie = $_POST['id_categorie']; // L'ID de la catégorie à supprimer
-
-        if ($category->deleteCategory($idCategorie)) {
-            $success = 'Catégorie supprimée avec succès';
-            $categories = $category->getAllCategories(); // Recharge la liste des catégories
+      elseif (isset($_POST['delete_user'])) {
+        $userId = $_POST['user_id'];
+        if ($user->softDeleteUser($userId)) {
+            $success = 'Utilisateur supprimé avec succès';
+            $users = $user->getAllUsers();
         } else {
-            $error = 'Erreur lors de la suppression de la catégorie';
+            $error = 'Erreur lors de la suppression de l\'utilisateur';
         }
     }
 }

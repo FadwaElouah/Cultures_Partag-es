@@ -222,13 +222,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($categories as $index => $cat): ?>
+        <!-- <?php foreach ($categories as $index => $cat): ?>
             <tr class="<?php echo $index % 2 == 0 ? 'bg-white' : 'bg-gray-200'; ?>">
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['name']); ?></td>
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['description']); ?></td>
                 <td class="px-4 py-2 border-b">
-                    ==============
-                  
+                
+            
                     <form action="admin_dashboard.php" method="POST" class="inline">
                         <input type="hidden" name="id_categorie" value="<?php echo $cat['id_categorie']; ?>">
                         <button type="submit" name="edit_category" class="bg-yellow-500 hover:bg-yellow-700 text-white  rounded">Modifier</button>
@@ -241,7 +241,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </form>
                 </td>
             </tr>
-        <?php endforeach; ?>
+        <?php endforeach; ?> -->
+        <?php foreach ($categories as $cat): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($cat['name']); ?></td>
+                <td><?php echo htmlspecialchars($cat['description']); ?></td>
+                <td>
+                <button onclick="openCategoryModal(<?php echo htmlspecialchars(json_encode($cat)); ?>)" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
+                <form action="admin_dashboard.php" method="POST" class="inline">
+                     <input type="hidden" name="category_id" value="<?php echo $cat['id_categorie']; ?>">
+                   <button type="submit" name="delete_category" class="text-red-500 hover:text-red-700" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');"><i class="fas fa-trash"></i></button>
+                 </form>
+                </td>
+             </tr>
+      <?php endforeach; ?>
     </tbody>
 </table>
 

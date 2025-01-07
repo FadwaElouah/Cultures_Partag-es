@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <th class="text-left border border-gray-300 px-4 py-2">Nom</th>
             <th class="text-left border border-gray-300 px-4 py-2">Email</th>
             <th class="text-left border border-gray-300 px-4 py-2">Rôle</th>
+            <th class="text-left border border-gray-300 px-4 py-2">Actions</th>
         </tr>
     </thead>
     <tbody>

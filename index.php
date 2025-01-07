@@ -3,6 +3,8 @@ session_start();
 require_once 'Article.php';
 require_once 'Category.php';
 require_once 'User.php'; 
+require_once 'Comment.php';
+require_once 'Search.php';
 
 // Check if the user is logged in
 $user = new User();
@@ -13,9 +15,17 @@ if (!$user->isLoggedIn()) {
 
 $article = new Article();
 $category = new Category();
+$comment = new Comment();
+$search = new Search();
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $selectedCategory = isset($_GET['category']) ? (int)$_GET['category'] : null;
+
+
+// Handle search    
+$searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
+$searchAuthor = isset($_GET['author']) ? $_GET['author'] : '';
+$searchCategory = isset($_GET['search_category']) ? $_GET['search_category'] : '';
 
 $articles = $article->getAllArticles($page, 10, $selectedCategory);
 $categories = $category->getAllCategories();

@@ -38,13 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $error = 'Erreur lors de l\'approbation de l\'article';
         }
-    } elseif (isset($_POST['reject_article'])) {
+    } 
+    elseif (isset($_POST['reject_article'])) {
         if ($article->rejectArticle($_POST['article_id'])) {
             $success = 'Article rejeté avec succès';
         } else {
             $error = 'Erreur lors du rejet de l\'article';
         }
-    } elseif (isset($_POST['create_category'])) {
+    }
+     elseif (isset($_POST['create_category'])) {
         $categoryName = $_POST['category_name'];
         $categoryDescription = $_POST['category_description'];
         if ($category->createCategory($categoryName, $categoryDescription)) {
@@ -54,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = 'Erreur lors de la création de la catégorie';
         }
     }
-      // Modifier une catégorie
+      // update user
       elseif (isset($_POST['update_user'])) {
         $userId = $_POST['user_id'];
         $name = $_POST['user_name'];
@@ -66,7 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $error = 'Erreur lors de la mise à jour de l\'utilisateur';
         }
-      // Supprimer une catégorie
+    }
+      // delete user
       elseif (isset($_POST['delete_user'])) {
         $userId = $_POST['user_id'];
         if ($user->softDeleteUser($userId)) {
@@ -74,6 +77,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $users = $user->getAllUsers();
         } else {
             $error = 'Erreur lors de la suppression de l\'utilisateur';
+        }
+    }
+    //  update category
+    elseif (isset($_POST['update_category'])) {
+        $categoryId = $_POST['category_id'];
+        $name = $_POST['category_name'];
+        $description = $_POST['category_description'];
+        if ($category->updateCategory($categoryId, $name, $description)) {
+            $success = 'Catégorie mise à jour avec succès';
+            $categories = $category->getAllCategories();
+        } else {
+            $error = 'Erreur lors de la mise à jour de la catégorie';
+        }
+    } 
+   //  delete category
+    elseif (isset($_POST['delete_category'])) {
+        $categoryId = $_POST['category_id'];
+        if ($category->deleteCategory($categoryId)) {
+            $success = 'Catégorie supprimée avec succès';
+            $categories = $category->getAllCategories();
+        } else {
+            $error = 'Erreur lors de la suppression de la catégorie';
         }
     }
 }

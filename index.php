@@ -39,8 +39,12 @@ if (isset($_POST['like_article'])) {
     $article->likeArticle($_POST['article_id'], $_SESSION['user_id']);
 }
 
+// Handle comment submission
+if (isset($_POST['submit_comment'])) {
+    $comment->addComment($_POST['article_id'], $_SESSION['user_id'], $_POST['comment_content']);
+}
 
-
+// ====
 $articles = $article->getAllArticles($page, 10, $selectedCategory);
 $categories = $category->getAllCategories();
 ?>

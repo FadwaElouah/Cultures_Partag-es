@@ -79,6 +79,19 @@ class User {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id]);
     }
+
+    public function sendWelcomeEmail($email, $name, $role) {
+        $subject = "Bienvenue sur Cultures Partagées";
+        
+        if ($role === 'auteur') {
+            $message = "Bonjour $name,\n\nBienvenue sur Cultures Partagées! Nous sommes ravis de vous avoir parmi nos auteurs. N'hésitez pas à commencer à publier vos articles dès maintenant.";
+        } else {
+            $message = "Bonjour $name,\n\nBienvenue sur Cultures Partagées! Nous vous invitons à explorer notre plateforme, commenter les articles et ajouter vos favoris.";
+        }
+
+        // Use PHP's mail function or a library like PHPMailer to send the email
+        return mail($email, $subject, $message);
+    }
 }
 
 

@@ -16,6 +16,17 @@ $article = new Article();
 $users = $user->getAllUsers();
 $categories = $category->getAllCategories();
 $pendingArticles = $article->getPendingArticles();
+// -------------------------------------------------
+    // $orderedUser = [];
+    // foreach($users as $user){
+    //     $orderedUser[] = [
+    //         'nom utilisateur' => $user['name'];
+    //     ]
+
+    // }
+// -------------------------------------------------
+
+
 
 $success = '';
 $error = '';
@@ -43,7 +54,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = 'Erreur lors de la création de la catégorie';
         }
     }
+      // Modifier une catégorie
+      elseif (isset($_POST['update_user'])) {
+        $userId = $_POST['user_id'];
+        $name = $_POST['user_name'];
+        $email = $_POST['user_email'];
+        $role = $_POST['user_role'];
+        if ($user->updateUser($userId, $name, $email, $role)) {
+            $success = 'Utilisateur mis à jour avec succès';
+            $users = $user->getAllUsers();
+        } else {
+            $error = 'Erreur lors de la mise à jour de l\'utilisateur';
+        }
+      // Supprimer une catégorie
+      if (isset($_POST['delete_category'])) {
+        $idCategorie = $_POST['id_categorie']; // L'ID de la catégorie à supprimer
+
+        if ($category->deleteCategory($idCategorie)) {
+            $success = 'Catégorie supprimée avec succès';
+            $categories = $category->getAllCategories(); // Recharge la liste des catégories
+        } else {
+            $error = 'Erreur lors de la suppression de la catégorie';
+        }
+    }
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -136,11 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </button>
                         </div>
                     </form>
-                    <table class="w-full border border-gray-300">
+ <table class="w-full border border-gray-300">
     <thead class="bg-gray-300">
         <tr>
             <th class="text-left px-4 py-2 border-b">Nom</th>
             <th class="text-left px-4 py-2 border-b">Description</th>
+            <th class="text-left px-4 py-2 border-b">Actions</th> <!-- kolchi dyal les actions -->
         </tr>
     </thead>
     <tbody>
@@ -148,10 +186,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <tr class="<?php echo $index % 2 == 0 ? 'bg-white' : 'bg-gray-200'; ?>">
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['name']); ?></td>
                 <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['description']); ?></td>
+                <td class="px-4 py-2 border-b">
+                    <!-- Formulaire Modifier -->
+                    <form action="admin_dashboard.php" method="POST" class="inline">
+                        <input type="hidden" name="id_categorie" value="<?php echo $cat['id_categorie']; ?>">
+                        <button type="submit" name="edit_category" class="bg-yellow-500 hover:bg-yellow-700 text-white  rounded">Modifier</button>
+                    </form>
+                    
+                    <!-- Formulaire Supprimer -->
+                    <form action="admin_dashboard.php" method="POST" class="inline">
+                        <input type="hidden" name="id_categorie" value="<?php echo $cat['id_categorie']; ?>">
+                        <button type="submit" name="delete_category" class="bg-red-500 hover:bg-red-700 text-white  rounded">Supprimer</button>
+                    </form>
+                </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+
 
                 </div>
             </div>
@@ -167,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="mb-4 p-4 border rounded">
                             <h3 class="text-xl font-bold"><?php echo htmlspecialchars($article['title']); ?></h3>
                             <p class="mb-2">Par <?php echo htmlspecialchars($article['author_name']); ?> dans <?php echo htmlspecialchars($article['category_name']); ?></p>
-                            <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) .  '...'; ?></p>
+                            <!-- <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) .  '...'; ?></p> -->
                             <form action="admin_dashboard.php" method="POST" class="inline-block">
                                 <input type="hidden" name="article_id" value="<?php echo $article['id_article']; ?>">
                                 <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"><i class="fa-solid fa-check"></i></button>

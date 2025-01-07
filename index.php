@@ -41,9 +41,9 @@ $categories = $category->getAllCategories();
                     <?php if ($user->isAdmin()): ?>
                         <a href="admin_dashboard.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Admin</a>
                     <?php endif; ?>
-                    <!-- <?php if ($user->isAuthor() || $user->isAdmin()): ?>
+                   <?php if ($user->isAuthor()): ?>
                         <a href="create_article.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Créer un article</a>
-                    <?php endif; ?> -->
+                    <?php endif; ?> 
                     <a href="logout.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300 font-bold">Déconnexion</a>
                 <?php else: ?>
                     <a href="login.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Connexion</a>

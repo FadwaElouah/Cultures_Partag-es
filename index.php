@@ -27,6 +27,20 @@ $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
 $searchAuthor = isset($_GET['author']) ? $_GET['author'] : '';
 $searchCategory = isset($_GET['search_category']) ? $_GET['search_category'] : '';
 
+if (!empty($searchKeyword) || !empty($searchAuthor) || !empty($searchCategory)) {
+    $articles = $search->searchArticles($searchKeyword, $searchAuthor, $searchCategory);
+} else {
+    $articles = $article->getAllArticles($page, 10, $selectedCategory);
+}
+$categories = $category->getAllCategories();
+
+// Handle like/favorite
+if (isset($_POST['like_article'])) {
+    $article->likeArticle($_POST['article_id'], $_SESSION['user_id']);
+}
+
+
+
 $articles = $article->getAllArticles($page, 10, $selectedCategory);
 $categories = $category->getAllCategories();
 ?>

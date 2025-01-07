@@ -92,6 +92,13 @@ class User {
         // Use PHP's mail function or a library like PHPMailer to send the email
         return mail($email, $subject, $message);
     }
+
+    public function getUserById($userId) {
+        $sql = "SELECT * FROM utilisateur WHERE id_utilisateur = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$userId]);
+        return $stmt->fetch();
+    }
 }
 
 

@@ -371,7 +371,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
+    <script>
+        function openUserModal(user) {
+            document.getElementById('user_id').value = user.id_utilisateur;
+            document.getElementById('user_name').value = user.name;
+            document.getElementById('user_email').value = user.email;
+            document.getElementById('user_role').value = user.role;
+            document.getElementById('userModal').classList.remove('hidden');
+        }
 
+        function closeUserModal() {
+            document.getElementById('userModal').classList.add('hidden');
+        }
+
+        function openCategoryModal(category) {
+            document.getElementById('category_id').value = category.id_categorie;
+            document.getElementById('category_name').value = category.name;
+            document.getElementById('category_description').value = category.description;
+            document.getElementById('categoryModal').classList.remove('hidden');
+        }
+    
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').classList.add('hidden');
+        }
+    </script>
     <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>

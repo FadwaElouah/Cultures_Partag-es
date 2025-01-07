@@ -106,6 +106,15 @@ $categories = $category->getAllCategories();
                             <span>Par <?php echo htmlspecialchars($art['author_name']); ?></span>
                             <span><?php echo htmlspecialchars($art['category_name']); ?></span>
                         </div>
+                        <div class="flex justify-between items-center">
+                            <form action="index.php" method="POST">
+                                <input type="hidden" name="article_id" value="<?php echo $art['id_article']; ?>">
+                                <button type="submit" name="like_article" class="text-red-500 hover:text-red-600 transition duration-300">
+                                    <i class="fas fa-heart"></i> J'aime
+                                </button>
+                            </form>
+                            <a href="article.php?id=<?php echo $art['id_article']; ?>" class="text-blue-500 hover:text-blue-600 transition duration-300">Lire plus</a>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>

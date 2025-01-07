@@ -57,6 +57,22 @@ class User {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id]);
     }
+     //new
+     public function updateProfile($id, $name, $email, $profile_picture = null) {
+        $sql = "UPDATE utilisateur SET name = ?, email = ?";
+        $params = [$name, $email];
+
+        if ($profile_picture) {
+            $sql .= ", profile_picture = ?";
+            $params[] = $profile_picture;
+        }
+
+        $sql .= " WHERE id_utilisateur = ?";
+        $params[] = $id;
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
 }
 
 

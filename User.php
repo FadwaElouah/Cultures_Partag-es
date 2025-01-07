@@ -73,6 +73,12 @@ class User {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute($params);
     }
+
+    public function softDeleteUser($id) {
+        $sql = "UPDATE utilisateur SET is_active = 0 WHERE id_utilisateur = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$id]);
+    }
 }
 
 

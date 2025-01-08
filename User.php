@@ -66,6 +66,7 @@ class User {
             $sql .= ", profile_picture = ?";
             $params[] = $profile_picture;
         }
+        
 
         $sql .= " WHERE id_utilisateur = ?";
         $params[] = $id;
@@ -74,11 +75,49 @@ class User {
         return $stmt->execute($params);
     }
 
-    public function softDeleteUser($id) {
-        $sql = "UPDATE utilisateur SET is_active = 0 WHERE id_utilisateur = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$id]);
+    // public function softDeleteUser($id) {
+    //     $sql = "UPDATE utilisateur SET is_active = 0 WHERE id_utilisateur = ?";
+    //     $stmt = $this->db->prepare($sql);
+    //     return $stmt->execute([$id]);
+    // }
+
+    public function softDeleteUser($userId) {
+        try {
+            // Au lieu de supprimer l'utilisateur, on le désactive simplement
+            $query = "UPDATE utilisateur SET is_active = 0 WHERE id_utilisateur = :id";
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute([':id' => $userId]);
+        } catch(PDOException $e) {
+            error_log("Erreur lors de la désactivation : " . $e->getMessage());
+            return false;
+        }
     }
+
+    // Si tu veux vraiment supprimer l'utilisateur définitivement
+    public function hardDeleteUser($userId) {
+        try {
+            $query = "DELETE FROM utilisateur WHERE id_utilisateur = :id";
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute([':id' => $userId]);
+        } catch(PDOException $e) {
+            error_log("Erreur lors de la suppression : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Pour récupérer uniquement les utilisateurs actifs
+    public function getAllActiveUsers() {
+        try {
+            $query = "SELECT * FROM utilisateur WHERE is_active = 1";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch(PDOException $e) {
+            error_log("Erreur lors de la récupération : " . $e->getMessage());
+            return [];
+        }
+    }
+    
 
     public function sendWelcomeEmail($email, $name, $role) {
         $subject = "Bienvenue sur Cultures Partagées";

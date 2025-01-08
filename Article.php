@@ -80,6 +80,7 @@ public function getArticleById($id) {
     $stmt->execute([$id]);
     return $stmt->fetch();
 }
+//new
 public function likeArticle($article_id, $user_id) {
     $sql = "INSERT INTO likes (id_article, id_utilisateur) VALUES (?, ?)";
     $stmt = $this->db->prepare($sql);
@@ -91,6 +92,7 @@ public function likeArticle($article_id, $user_id) {
 
     return $result;
 }
+
 public function addToFavorites($article_id, $user_id) {
     $sql = "INSERT INTO favorites (id_article, id_utilisateur) VALUES (?, ?)";
     $stmt = $this->db->prepare($sql);
@@ -119,6 +121,7 @@ public function generatePDF($article_id) {
 
     return $pdf->Output($article['title'] . '.pdf', 'S');
 }
+
 public function addTag($article_id, $tag_name) {
     $sql = "INSERT INTO tags (name) VALUES (?) ON DUPLICATE KEY UPDATE id_tag = LAST_INSERT_ID(id_tag)";
     $stmt = $this->db->prepare($sql);
@@ -129,5 +132,6 @@ public function addTag($article_id, $tag_name) {
     $stmt = $this->db->prepare($sql);
     return $stmt->execute([$article_id, $tag_id]);
 }
+
 
 }

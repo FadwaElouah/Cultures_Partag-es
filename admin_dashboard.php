@@ -16,17 +16,6 @@ $article = new Article();
 $users = $user->getAllUsers();
 $categories = $category->getAllCategories();
 $pendingArticles = $article->getPendingArticles();
-// -------------------------------------------------
-    // $orderedUser = [];
-    // foreach($users as $user){
-    //     $orderedUser[] = [
-    //         'nom utilisateur' => $user['name'];
-    //     ]
-
-    // }
-// -------------------------------------------------
-
-
 
 $success = '';
 $error = '';
@@ -38,15 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $error = 'Erreur lors de l\'approbation de l\'article';
         }
-    } 
-    elseif (isset($_POST['reject_article'])) {
+    } elseif (isset($_POST['reject_article'])) {
         if ($article->rejectArticle($_POST['article_id'])) {
             $success = 'Article rejeté avec succès';
         } else {
             $error = 'Erreur lors du rejet de l\'article';
         }
-    }
-     elseif (isset($_POST['create_category'])) {
+    } elseif (isset($_POST['create_category'])) {
         $categoryName = $_POST['category_name'];
         $categoryDescription = $_POST['category_description'];
         if ($category->createCategory($categoryName, $categoryDescription)) {
@@ -55,9 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $error = 'Erreur lors de la création de la catégorie';
         }
-    }
-      // update user
-      elseif (isset($_POST['update_user'])) {
+        
+    } elseif (isset($_POST['update_user'])) {
         $userId = $_POST['user_id'];
         $name = $_POST['user_name'];
         $email = $_POST['user_email'];
@@ -68,9 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $error = 'Erreur lors de la mise à jour de l\'utilisateur';
         }
-    }
-      // delete user
-      elseif (isset($_POST['delete_user'])) {
+    } elseif (isset($_POST['delete_user'])) {
         $userId = $_POST['user_id'];
         if ($user->softDeleteUser($userId)) {
             $success = 'Utilisateur supprimé avec succès';
@@ -78,9 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $error = 'Erreur lors de la suppression de l\'utilisateur';
         }
-    }
-    //  update category
-    elseif (isset($_POST['update_category'])) {
+    } elseif (isset($_POST['update_category'])) {
         $categoryId = $_POST['category_id'];
         $name = $_POST['category_name'];
         $description = $_POST['category_description'];
@@ -90,9 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $error = 'Erreur lors de la mise à jour de la catégorie';
         }
-    } 
-   //  delete category
-    elseif (isset($_POST['delete_category'])) {
+    } elseif (isset($_POST['delete_category'])) {
         $categoryId = $_POST['category_id'];
         if ($category->deleteCategory($categoryId)) {
             $success = 'Catégorie supprimée avec succès';
@@ -102,9 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -114,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord Admin - Cultures Partagées</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body class="bg-gray-100">
     <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg">
@@ -131,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </nav>
     </header>
 
-<main class="container mx-auto px-6 py-8">
+    <main class="container mx-auto px-6 py-8">
         <h1 class="text-3xl font-bold mb-6">Tableau de bord Administrateur</h1>
 
         <?php if ($success): ?>
@@ -148,45 +125,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <h2 class="text-2xl text-green-400 font-bold mb-4">Gestion des utilisateurs</h2>
+                <h2 class="text-2xl font-bold mb-4">Gestion des utilisateurs</h2>
                 <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <table class="w-full">
-       <table class="w-full border-collapse border border-gray-300">
-          <thead class="bg-gray-300">
-        <tr>
-            <th class="text-left border border-gray-300 px-4 py-2">Nom</th>
-            <th class="text-left border border-gray-300 px-4 py-2">Email</th>
-            <th class="text-left border border-gray-300 px-4 py-2">Rôle</th>
-            <th class="text-left border border-gray-300 px-4 py-2">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php $loopIndex = 0;?>
-        <!-- <?php foreach ($users as $u): ?>
-            <tr class="<?php echo $loopIndex % 2 === 0 ? 'bg-white' : 'bg-gray-200'; ?>">
-                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['name']); ?></td>
-                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['email']); ?></td>
-                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($u['role']); ?></td>
-            </tr>
-     <?php $loopIndex++; endforeach; ?>
-      -->
-      <?php foreach ($users as $u): ?>
-              <tr>
-                <td><?php echo htmlspecialchars($u['name']); ?></td>
-                <td><?php echo htmlspecialchars($u['email']); ?></td>
-                <td><?php echo htmlspecialchars($u['role']); ?></td>
-                <td>
-                     <button onclick="openUserModal(<?php echo htmlspecialchars(json_encode($u)); ?>)" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
-                      <form action="admin_dashboard.php" method="POST" class="inline">
-                        <input type="hidden" name="user_id" value="<?php echo $u['id_utilisateur']; ?>">
-                        <button type="submit" name="delete_user" class="text-red-500 hover:text-red-700" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');"><i class="fas fa-trash"></i></button>
-                      </form>
-                 </td>
-             </tr>
-     <?php endforeach; ?>
-    </tbody>
-</table>
-
+                        <thead>
+                            <tr>
+                                <th class="text-left">Nom</th>
+                                <th class="text-left">Email</th>
+                                <th class="text-left">Rôle</th>
+                                <th class="text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users as $u): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($u['name']); ?></td>
+                                    <td><?php echo htmlspecialchars($u['email']); ?></td>
+                                    <td><?php echo htmlspecialchars($u['role']); ?></td>
+                                    <td>
+                                        <button onclick="openUserModal(<?php echo htmlspecialchars(json_encode($u)); ?>)" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
+                                        <form action="admin_dashboard.php" method="POST" class="inline">
+                                            <input type="hidden" name="user_id" value="<?php echo $u['id_utilisateur']; ?>">
+                                            <button type="submit" name="delete_user" class="text-red-500 hover:text-red-700" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -213,52 +178,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </button>
                         </div>
                     </form>
- <table class="w-full border border-gray-300">
-    <thead class="bg-gray-300">
-        <tr>
-            <th class="text-left px-4 py-2 border-b">Nom</th>
-            <th class="text-left px-4 py-2 border-b">Description</th>
-            <th class="text-left px-4 py-2 border-b">Actions</th> <!-- kolchi dyal les actions -->
-        </tr>
-    </thead>
-    <tbody>
-        <!-- <?php foreach ($categories as $index => $cat): ?>
-            <tr class="<?php echo $index % 2 == 0 ? 'bg-white' : 'bg-gray-200'; ?>">
-                <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['name']); ?></td>
-                <td class="px-4 py-2 border-b"><?php echo htmlspecialchars($cat['description']); ?></td>
-                <td class="px-4 py-2 border-b">
-                
-            
-                    <form action="admin_dashboard.php" method="POST" class="inline">
-                        <input type="hidden" name="id_categorie" value="<?php echo $cat['id_categorie']; ?>">
-                        <button type="submit" name="edit_category" class="bg-yellow-500 hover:bg-yellow-700 text-white  rounded">Modifier</button>
-                    </form>
-                    
-                 
-                    <form action="admin_dashboard.php" method="POST" class="inline">
-                        <input type="hidden" name="id_categorie" value="<?php echo $cat['id_categorie']; ?>">
-                        <button type="submit" name="delete_category" class="bg-red-500 hover:bg-red-700 text-white  rounded">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?> -->
-        <?php foreach ($categories as $cat): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($cat['name']); ?></td>
-                <td><?php echo htmlspecialchars($cat['description']); ?></td>
-                <td>
-                <button onclick="openCategoryModal(<?php echo htmlspecialchars(json_encode($cat)); ?>)" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
-                <form action="admin_dashboard.php" method="POST" class="inline">
-                     <input type="hidden" name="category_id" value="<?php echo $cat['id_categorie']; ?>">
-                   <button type="submit" name="delete_category" class="text-red-500 hover:text-red-700" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');"><i class="fas fa-trash"></i></button>
-                 </form>
-                </td>
-             </tr>
-      <?php endforeach; ?>
-    </tbody>
-</table>
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Nom</th>
+                                <th class="text-left">Description</th>
+                                <th class="text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($categories as $cat): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($cat['name']); ?></td>
+                                    <td><?php echo htmlspecialchars($cat['description']); ?></td>
+                                    <td>
+                                        <button onclick="openCategoryModal(<?php echo htmlspecialchars(json_encode($cat)); ?>)" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
+                                        <form action="admin_dashboard.php" method="POST" class="inline">
+                                            <input type="hidden" name="category_id" value="<?php echo $cat['id_categorie']; ?>">
+                                            <button type="submit" name="delete_category" class="text-red-500 hover:text-red-700" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');"><i class="fas fa-trash"></i></button>
+                                          
 
-
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -273,21 +218,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="mb-4 p-4 border rounded">
                             <h3 class="text-xl font-bold"><?php echo htmlspecialchars($article['title']); ?></h3>
                             <p class="mb-2">Par <?php echo htmlspecialchars($article['author_name']); ?> dans <?php echo htmlspecialchars($article['category_name']); ?></p>
-                            <!-- <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) .  '...'; ?></p> -->
+                            <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) . '...'; ?></p>
                             <form action="admin_dashboard.php" method="POST" class="inline-block">
                                 <input type="hidden" name="article_id" value="<?php echo $article['id_article']; ?>">
-                                <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"><i class="fa-solid fa-check"></i></button>
-                                <button type="submit" name="reject_article" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"><i class="fa-solid fa-trash"></i></button>
+                                <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">Approuver</button>
+                                <button type="submit" name="reject_article" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Rejeter</button>
                             </form>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </div>
-</main>
+    </main>
 
- <!-- User Edit Modal -->
- <div id="userModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <!-- User Edit Modal -->
+    <div id="userModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -333,9 +278,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
-     
-     <!-- Category Edit Modal -->
-     <div id="categoryModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+
+    <!-- Category Edit Modal -->
+    <div id="categoryModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -371,6 +316,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
+
+    <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
+        </div>
+    </footer>
+
     <script>
         function openUserModal(user) {
             document.getElementById('user_id').value = user.id_utilisateur;
@@ -395,11 +347,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('categoryModal').classList.add('hidden');
         }
     </script>
-    <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2024 Cultures Partagées. Tous droits réservés.</p>
-        </div>
-    </footer>
 </body>
 </html>
-

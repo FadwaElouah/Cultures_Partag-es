@@ -10,6 +10,7 @@ CREATE TABLE utilisateur (
     password VARCHAR(255) NOT NULL,
     role ENUM('admin', 'auteur', 'utilisateur') ,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ADD COLUMN is_active BOOLEAN DEFAULT 1;
 );
 
 -- Table pour les catégories

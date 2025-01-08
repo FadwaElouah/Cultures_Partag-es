@@ -46,4 +46,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
              $error = "Type de fichier non autorisé. Veuillez télécharger une image (jpg, jpeg, png, gif).";
          }
      }
-     }
+     if (empty($error)) {
+        if ($user->verifyPassword($userId, $currentPassword)) {
+            if (!empty($newPassword)) {
+                if ($newPassword === $confirmPassword) {
+                    if ($user->updateUser($userId, $name, $email, $profilePicture, $newPassword)) {
+                        $success = "Profil mis à jour avec succès.";
+                    } else {
+                        $error = "Erreur lors de la mise à jour du profil.";
+                    }
+                } else {
+                    $error = "Les nouveaux mots de passe ne correspondent pas.";
+                }
+            } else {
+                if ($user->updateUser($userId, $name, $email, $profilePicture)) {
+                    $success = "Profil mis à jour avec succès.";
+                } else {
+                    $error = "Erreur lors de la mise à jour du profil.";
+                }
+            }
+        } else {
+            $error = "Mot de passe actuel incorrect.";
+        }
+    }
+
+    // Refresh user info after update
+    $userInfo = $user->getUserById($userId);
+}
+?>
+     

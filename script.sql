@@ -35,12 +35,15 @@ CREATE TABLE articles (
     FOREIGN KEY (id_auteur) REFERENCES utilisateur(id_utilisateur)
 );
 
+ALTER TABLE articles ADD image_url VARCHAR(255) NOT NULL;
+
+
 
 
 -- Insérer des utilisateur
 
 INSERT INTO utilisateur (name, email, password, role)
-VALUESf
+VALUES
 ('Mohamed Amin', 'mohamedamin@gmail.com', 'hashed_password1', 'admin'),
 ('Ali Hassan', 'alihassan@gmail.com', 'hashed_password2', 'auteur'),
 ('Fatima Zahra', 'fatimazahra@gmail.com', 'hashed_password3', 'auteur'),

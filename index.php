@@ -111,7 +111,7 @@ if (isset($_POST['submit_comment'])) {
             <?php foreach ($articles as $art): ?>
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                      <!-- Affichage de l'image dynamique -->
-        <img src="<?php echo htmlspecialchars($art['image_url']); ?>" alt="Article Image" class="w-full h-48 object-cover">
+                    <img src="<?php echo htmlspecialchars($art['image_url']); ?>" alt="Article Image" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-gray-900 mb-2"><?php echo htmlspecialchars($art['title']); ?></h2>
                         <p class="text-gray-600 mb-4"><?php echo substr(htmlspecialchars($art['content']), 0, 150) . '...'; ?></p>
@@ -129,7 +129,7 @@ if (isset($_POST['submit_comment'])) {
                             <a href="article.php?id=<?php echo $art['id_article']; ?>" class="text-blue-500 hover:text-blue-600 transition duration-300">Lire plus</a>
                         </div>
                     </div>
-                </div>
+                </div>  
             <?php endforeach; ?>
         </div>
 
@@ -146,6 +146,11 @@ if (isset($_POST['submit_comment'])) {
             <?php endfor; ?>
         </div>
     </main>
+
+
+   
+ 
+    
 
     <footer class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg text-white py-4 mt-16">
         <div class="container mx-auto px-6 text-center">

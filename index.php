@@ -35,9 +35,20 @@ if (!empty($searchKeyword) || !empty($searchAuthor) || !empty($searchCategory)) 
 $categories = $category->getAllCategories();
 
 // Handle adding to favorites
-if (isset($_POST['add_favorite'])) {
-    $article->toggleFavorite($_POST['article_id'], $_SESSION['user_id']);
+if (isset($_POST['add_favorite']) || isset($_POST['toggle_favorite'])) {
+    try {
+        $articleId = isset($_POST['article_id']) ? $_POST['article_id'] : null;
+        $userId = $_SESSION['user_id']; 
+        if ($article->toggleFavorite($articleId, $userId)) {
+            $success = 'Statut favori mis à jour avec succès';
+        } else {
+            $error = 'Erreur lors de la mise à jour du statut favori';
+        }
+    } catch (Exception $e) {
+        $error = 'Erreur: ' . $e->getMessage();
+    }
 }
+
 
 // Handle comment submission
 if (isset($_POST['submit_comment'])) {
@@ -67,7 +78,7 @@ if (isset($_POST['submit_comment'])) {
                 <?php if ($user->isAdmin()): ?>
                     <a href="admin_dashboard.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Admin</a>
                 <?php endif; ?>
-                <?php if ($user->isAuthor() || $user->isAdmin()): ?>
+                <?php if ($user->isAuthor()): ?>
                     <a href="create_article.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Créer un article</a>
                 <?php endif; ?>
                 <a href="profile.php" class="hover:bg-white hover:text-gray-800 px-4 py-2 rounded-md transition duration-300">Profil</a>

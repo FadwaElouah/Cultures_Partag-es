@@ -41,7 +41,7 @@ class Category {
     public function createCategory() {
         $sql = "INSERT INTO categories (name, description) VALUES (?, ?)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$this->getName(), $this->getDescription()]);
+        // return $stmt->execute([$this->getName(), $this->getDescription()]);
     }
 
     public function updateCategory() {

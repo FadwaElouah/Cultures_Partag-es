@@ -20,12 +20,17 @@ $pendingArticles = $article->getPendingArticles();
 $success = '';
 $error = '';
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['approve_article'])) {
-        if ($article->approveArticle($_POST['article_id'])) {
-            $success = 'Article approuvé avec succès';
-        } else {
-            $error = 'Erreur lors de l\'approbation de l\'article';
+        try {
+            if ($article->approveArticle($_POST['article_id'])) {
+                $success = 'Article approuvé avec succès';
+            } else {
+                $error = 'Erreur lors de l\'approbation de l\'article';
+            }
+        } catch (Exception $e) {
+            $error = 'Erreur: ' . $e->getMessage();
         }
     } elseif (isset($_POST['reject_article'])) {
         if ($article->rejectArticle($_POST['article_id'])) {
@@ -220,10 +225,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p class="mb-2">Par <?php echo htmlspecialchars($article['author_name']); ?> dans <?php echo htmlspecialchars($article['category_name']); ?></p>
                             <p class="mb-4"><?php echo substr(htmlspecialchars($article['content']), 0, 200) . '...'; ?></p>
                             <form action="admin_dashboard.php" method="POST" class="inline-block">
-                                <input type="hidden" name="article_id" value="<?php echo $article['id_article']; ?>">
-                                <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">Approuver</button>
-                                <button type="submit" name="reject_article" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Rejeter</button>
-                            </form>
+    <input type="hidden" name="article_id" value="<?php echo $article['id_article']; ?>">
+    <button type="submit" name="approve_article" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">Approuver</button>
+    <button type="submit" name="reject_article" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Rejeter</button>
+</form>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>

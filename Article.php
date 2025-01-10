@@ -72,6 +72,7 @@ class Article {
     public function setImageUrl($image_url) {
         $this->image_url = $image_url;
     }
+  
     public function getAllArticles($page = 1, $perPage = 10, $category = null) {
         $offset = ($page - 1) * $perPage;
         $sql = "SELECT a.*, c.name as category_name, u.name as author_name 
@@ -134,39 +135,53 @@ class Article {
         return $stmt->execute([$this->getId()]);
     }
 
-    public function toggleFavorite($userId) {
-        $checkSql = "SELECT * FROM favorites WHERE id_article = ? AND id_utilisateur = ?";
-        $checkStmt = $this->db->prepare($checkSql);
-        $checkStmt->execute([$this->getId(), $userId]);
-        
-        if ($checkStmt->rowCount() == 0) {
-            $sql = "INSERT INTO favorites (id_article, id_utilisateur) VALUES (?, ?)";
-            $stmt = $this->db->prepare($sql);
-            return $stmt->execute([$this->getId(), $userId]);
-        } else {
-            $sql = "DELETE FROM favorites WHERE id_article = ? AND id_utilisateur = ?";
-            $stmt = $this->db->prepare($sql);
-            return $stmt->execute([$this->getId(), $userId]);
-        }
+    public function toggleFavorite($articleId, $userId) {
+        $sql = "INSERT INTO favorites (id_article, id_utilisateur) VALUES (?, ?)
+                ON DUPLICATE KEY UPDATE id_utilisateur = NULL";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$articleId, $userId]);
     }
+    
 
-    public function getPendingArticles() {
+    public function getPendingArticles($page = 1, $perPage = 10) {
+        $offset = ($page - 1) * $perPage;
         $sql = "SELECT a.*, c.name as category_name, u.name as author_name 
                 FROM articles a 
                 JOIN categories c ON a.id_categorie = c.id_categorie 
                 JOIN utilisateur u ON a.id_auteur = u.id_utilisateur 
-                WHERE a.status = 'pending'";
-        $stmt = $this->db->query($sql);
+                WHERE a.status = 'pending'
+                LIMIT ? OFFSET ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$perPage, $offset]);
         return $stmt->fetchAll();
     }
+    
 
-    public function approveArticle() {
-        $this->setStatus('approved');
-        $sql = "UPDATE articles SET status = ? WHERE id_article = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$this->getStatus(), $this->getId()]);
+    public function approveArticle($articleId) {
+        try {
+            $sql = "UPDATE articles SET status = 'approved' WHERE id_article = ?";
+            $stmt = $this->db->prepare($sql);
+            $result = $stmt->execute([$articleId]);
+            if (!$result) {
+                throw new PDOException("Update failed.");
+            }
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error approving article: " . $e->getMessage());
+            return false;
+        }
     }
-
+    public function getFavoriteArticlesCount($userId) {
+        $sql = "SELECT COUNT(*) as count 
+                FROM favorites 
+                WHERE id_utilisateur = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$userId]);
+        $result = $stmt->fetch();
+        return $result['count'] ?? 0;
+    }
+    
+    
     public function rejectArticle() {
         $this->setStatus('rejected');
         $sql = "UPDATE articles SET status = ? WHERE id_article = ?";
@@ -239,7 +254,7 @@ class Article {
         $stmt->execute([$userId]);
         return $stmt->fetchAll();
     }
-
+    
     public function likeArticle($userId) {
         $checkSql = "SELECT * FROM likes WHERE id_article = ? AND id_utilisateur = ?";
         $checkStmt = $this->db->prepare($checkSql);

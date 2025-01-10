@@ -141,11 +141,13 @@ ORDER BY AVG(articles.id_article)
 
 -- Créer une vue affichant les derniers articles publiés dans les 30 derniers jours.
 
-CREATE VIEW derniers_articles AS
-SELECT articles.id_article, articles.title, articles.content, articles.created_at, categories.name
+
+
+CREATE VIEW derniers_articles
+SELECT id_article, title, content, id_categorie, id_auteur, created_at
 FROM articles
-JOIN categories ON articles.id_categorie = categories.id_categorie
-WHERE articles.created_at >= CURDATE() - INTERVAL 30 DAY;
+WHERE created_at >= NOW() - INTERVAL 30 DAY;
+
 
 
 
@@ -214,3 +216,37 @@ FOREIGN KEY (id_categorie)
 REFERENCES categories(id_categorie) 
 ON DELETE CASCADE;
 
+
+-- Afficher les articles les plus likés avec leur titre, le nombre de likes, et leur catégorie.
+
+SELECT articles.title, categories.name, COUNT(likes.id_like)
+FROM articles
+JOIN categories ON articles.id_categorie = categories.id_categorie
+LEFT JOIN likes ON articles.id_article = likes.id_article
+GROUP BY articles.id_article, categories.name
+ORDER BY COUNT(likes.id_like) DESC;
+
+
+-- Mettre à jour automatiquement le statut is_active d’un utilisateur à 0 (banni) après une action d’administration.
+
+CREATE TRIGGER bannir_utilisateur 
+AFTER UPDATE ON utilisateur
+FOR EACH ROW
+BEGIN
+    IF NEW.role = 'banni' THEN
+        UPDATE utilisateur 
+        SET is_active = 0 
+        WHERE id_utilisateur = NEW.id_utilisateur;
+    END IF;
+END;
+
+
+-- Identifier les tags les plus associés aux articles publiés au cours des 30 derniers jours, en affichant le nom du tag et le nombre d’associations.
+
+SELECT tags.name, COUNT(article_tags.id_tag) AS nombre_associations
+FROM tags
+JOIN article_tags ON tags.id_tag = article_tags.id_tag
+JOIN articles ON article_tags.id_article = articles.id_article
+WHERE articles.created_at >= NOW() - INTERVAL 30 DAY
+GROUP BY tags.name
+ORDER BY nombre_associations DESC;

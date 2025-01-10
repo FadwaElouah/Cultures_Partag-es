@@ -108,19 +108,22 @@ WHERE id_categorie = 2;
 
 -- Trouver le nombre total d'articles publiés par catégorie.
 
-SELECT categories.name, COUNT(articles.id_article)
-FROM categories
-LEFT JOIN articles ON categories.id_categorie = articles.id_categorie
-GROUP BY categories.id_categorie;
+SELECT COUNT(articles.id_article) , categories.name
+FROM categories 
+JOIN articles
+ON  categories.id_categorie = articles.id_categorie
+GROUP BY categories.name
+ORDER BY COUNT(articles.id_article) DESC
 
 
 -- Identifier les auteurs les plus actifs en fonction du nombre d'articles publiés.
 
-SELECT utilisateur.name AS auteur, COUNT(articles.id_article) AS nombre_articles
+SELECT utilisateur.name, COUNT(articles.id_article)
 FROM utilisateur
-LEFT JOIN articles ON utilisateur.id_utilisateur = articles.id_auteur
-GROUP BY utilisateur.id_utilisateur
-ORDER BY nombre_articles DESC;
+JOIN articles ON utilisateur.id_utilisateur = articles.id_auteur
+GROUP BY utilisateur.name
+ORDER BY COUNT(articles.id_article) DESC;
+
 
 -- Calculer la moyenne d'articles publiés par catégorie.
 
@@ -128,7 +131,13 @@ SELECT AVG(COUNT(articles.id_article))
 FROM categories
 LEFT JOIN articles ON categories.id_categorie = articles.id_categorie
 GROUP BY categories.id_categorie;
-
+-- ====
+SELECT AVG(articles.id_article) , categories.name
+FROM articles 
+JOIN categories
+ON categories.id_categorie = articles.id_categorie
+GROUP BY  categories.name
+ORDER BY AVG(articles.id_article)
 
 -- Créer une vue affichant les derniers articles publiés dans les 30 derniers jours.
 
@@ -149,5 +158,59 @@ WHERE articles.id_article IS NULL;
 
 
 
+-- =================
 
+ALTER TABLE utilisateur ADD COLUMN profile_picture VARCHAR(255);
+ALTER TABLE utilisateur ADD COLUMN is_active TINYINT(1) DEFAULT 1;
+
+CREATE TABLE likes (
+    id_like INT AUTO_INCREMENT PRIMARY KEY,
+    id_article INT,
+    id_utilisateur INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_article) REFERENCES articles(id_article),
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur)
+);
+
+CREATE TABLE favorites (
+    id_favorite INT AUTO_INCREMENT PRIMARY KEY,
+    id_article INT,
+    id_utilisateur INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_article) REFERENCES articles(id_article),
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur)
+);
+
+CREATE TABLE comments (
+    id_comment INT AUTO_INCREMENT PRIMARY KEY,
+    id_article INT,
+    id_utilisateur INT,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_article) REFERENCES articles(id_article),
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur)
+);
+
+CREATE TABLE tags (
+    id_tag INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) UNIQUE
+);
+
+CREATE TABLE article_tags (
+    id_article INT,
+    id_tag INT,
+    PRIMARY KEY (id_article, id_tag),
+    FOREIGN KEY (id_article) REFERENCES articles(id_article),
+    FOREIGN KEY (id_tag) REFERENCES tags(id_tag)
+);
+
+ALTER TABLE articles 
+DROP FOREIGN KEY articles_ibfk_1;
+
+-- Ajoutez la nouvelle contrainte avec ON DELETE CASCADE
+ALTER TABLE articles
+ADD CONSTRAINT articles_ibfk_1 
+FOREIGN KEY (id_categorie) 
+REFERENCES categories(id_categorie) 
+ON DELETE CASCADE;
 

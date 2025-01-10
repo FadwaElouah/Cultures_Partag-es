@@ -46,10 +46,10 @@ class User {
         return $stmt->fetchAll();
     }
 
-    public function updateUser($id, $name, $email, $role) {
-        $sql = "UPDATE utilisateur SET name = ?, email = ?, role = ? WHERE id_utilisateur = ?";
+    public function updateUser($id, $name, $email) {
+        $sql = "UPDATE utilisateur SET name = ?, email = ? WHERE id_utilisateur = ?";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$name, $email, $role, $id]);
+        return $stmt->execute([$name, $email,  $id]);
     }
 
     public function deleteUser($id) {

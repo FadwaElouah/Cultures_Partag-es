@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          }
      }
      if (empty($error)) {
-        if ($user->verifyPassword($userId, $currentPassword)) {
+        
             if (!empty($newPassword)) {
                 if ($newPassword === $confirmPassword) {
                     if ($user->updateUser($userId, $name, $email, $profilePicture, $newPassword)) {
@@ -65,9 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $error = "Erreur lors de la mise à jour du profil.";
                 }
             }
-        } else {
-            $error = "Mot de passe actuel incorrect.";
-        }
+        
     }
 
     // Refresh user info after update

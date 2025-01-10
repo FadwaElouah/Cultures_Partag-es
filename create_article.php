@@ -15,17 +15,39 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['title'];
-    $content = $_POST['content'];
-    $category_id = $_POST['category'];
+    $title = trim($_POST['title'] ?? '');
+    $content = trim($_POST['content'] ?? '');
+    $category_id = $_POST['category'] ?? '';
 
     if (empty($title) || empty($content) || empty($category_id)) {
         $error = 'Tous les champs sont obligatoires';
     } else {
-        if ($article->createArticle($title, $content, $category_id, $_SESSION['user_id'])) {
-            $success = 'Article créé avec succès. Il sera publié après validation par un administrateur.';
-        } else {
-            $error = 'Une erreur est survenue lors de la création de l\'article';
+        $article->setTitle($title);
+        $article->setContent($content);
+        $article->setCategoryId($category_id);
+        $article->setAuthorId($_SESSION['user_id']);
+
+        // Handle image upload
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $uploadResult = $article->uploadImage($_FILES['image']);
+            if ($uploadResult !== true) {
+                $error = $uploadResult;
+            }
+        }
+
+        if (empty($error)) {
+            try {
+                if ($article->createArticle()) {
+                    $success = 'Article créé avec succès. Il sera publié après validation par un administrateur.';
+                } else {
+                    $error = 'Une erreur est survenue lors de la création de l\'article';
+                }
+            } catch (InvalidArgumentException $e) {
+                $error = $e->getMessage();
+            } catch (Exception $e) {
+                $error = 'Une erreur inattendue est survenue. Veuillez réessayer plus tard.';
+                error_log($e->getMessage());
+            }
         }
     }
 }
@@ -69,28 +91,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         <?php endif; ?>
 
-        <form action="create_article.php" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form action="create_article.php" method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
                     Titre
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" name="title" >
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" name="title" required>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
                     Catégorie
                 </label>
-                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category" name="category" >
+                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category" name="category" required>
                     <?php foreach ($categories as $cat): ?>
                         <option value="<?php echo $cat['id_categorie']; ?>"><?php echo htmlspecialchars($cat['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
+                    Image
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="image" type="file" name="image" accept="image/*">
+            </div>
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="content">
                     Contenu
                 </label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="content" name="content" rows="10"></textarea>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="content" name="content" rows="10" required></textarea>
             </div>
             <div class="flex items-center justify-between">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">

@@ -3,61 +3,71 @@ require_once 'config.php';
 
 class Category {
     private $db;
-
+    private $id;
+    private $name;
+    private $description;
     public function __construct() {
         $this->db = Database::getInstance()->getConnection();
     }
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function getDescription() {
+        return $this->description;
+    }
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function setDescription($description) {
+        $this->description = $description;
+    }
+
     public function getAllCategories() {
         $sql = "SELECT * FROM categories";
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
     }
-    public function createCategory($name, $description) {
+
+    public function createCategory() {
         $sql = "INSERT INTO categories (name, description) VALUES (?, ?)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$name, $description]);
+        return $stmt->execute([$this->getName(), $this->getDescription()]);
     }
-    public function updateCategory($id, $name, $description) {
+
+    public function updateCategory() {
         $sql = "UPDATE categories SET name = ?, description = ? WHERE id_categorie = ?";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$name, $description, $id]);
+        return $stmt->execute([$this->getName(), $this->getDescription(), $this->getId()]);
     }
 
-   
-
-    // public function deleteCategory($id) {
-    //     $sql = "DELETE FROM categories WHERE id_categorie = ?";
-    //     $stmt = $this->db->prepare($sql);
-    //     return $stmt->execute([$id]);
-    // }
-
-
-
-    public function deleteCategory($id) {
+    public function deleteCategory() {
         try {
-            // Vérifier d'abord s'il y a des articles dans cette catégorie
             $checkQuery = "SELECT COUNT(*) FROM articles WHERE id_categorie = :id";
             $checkStmt = $this->db->prepare($checkQuery);
-            $checkStmt->execute([':id' => $id]);
+            $checkStmt->execute([':id' => $this->getId()]);
             $count = $checkStmt->fetchColumn();
 
             if ($count > 0) {
-                // Si on a des articles, on les supprime d'abord
                 $deleteArticlesQuery = "DELETE FROM articles WHERE id_categorie = :id";
                 $deleteArticlesStmt = $this->db->prepare($deleteArticlesQuery);
-                $deleteArticlesStmt->execute([':id' => $id]);
+                $deleteArticlesStmt->execute([':id' => $this->getId()]);
             }
-
-            // Ensuite on supprime la catégorie
             $deleteCategoryQuery = "DELETE FROM categories WHERE id_categorie = :id";
             $deleteCategoryStmt = $this->db->prepare($deleteCategoryQuery);
-            return $deleteCategoryStmt->execute([':id' => $id]);
+            return $deleteCategoryStmt->execute([':id' => $this->getId()]);
 
         } catch(PDOException $e) {
-            error_log("Erreur lors de la suppression : " . $e->getMessage());
+            error_log("Error during deletion: " . $e->getMessage());
             return false;
         }
-    }
-
-    // ... autres méthodes de la classe
-}
+    }}
